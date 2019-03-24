@@ -3,11 +3,11 @@ var express = require('express');
 var app = express();
 
 var fs = require('fs');
-var code_hash = fs.readFileSync('code_hash.txt','utf8');
-console.log (code_hash);
+// var code_hash = fs.readFileSync('code_hash.txt','utf8');
+// console.log (code_hash);
 console.log('The IPADDRESS is:', process.env.IP);
 console.log('The message is:', process.env.AZ);
-console.log('The hash is: %s', code_hash);
+// console.log('The hash is: %s', code_hash);
 
 var ipaddress = process.env.IP;
 var message = process.env.AZ;
@@ -19,12 +19,20 @@ app.use(morgan('combined'));
 // express-healthcheck: respond on /health route for LB checks
 app.use('/health', require('express-healthcheck')());
 
+app.get('/vladi', function (req, res) {
+  res.set({
+  'Content-Type': 'text/plain'
+})
+  res.send(`vladi test from ${message}`);
+  // res.send(`Hello World! from ${ipaddress} in AZ-${az} which has been up for ` + process.uptime() + 'ms');
+});
+
 // main route
 app.get('/', function (req, res) {
   res.set({
   'Content-Type': 'text/plain'
 })
-  res.send(`Node.js backend: Hello! from ${message} commit ${code_hash}`);
+  res.send(`Node.js backend: Hello! from ${message}`);
   // res.send(`Hello World! from ${ipaddress} in AZ-${az} which has been up for ` + process.uptime() + 'ms');
 });
 
